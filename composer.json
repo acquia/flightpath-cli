@@ -1,0 +1,22 @@
+{
+    "name": "acquia/migrate-assessment",
+    "description": "Acquia migrate assessment report builder.",
+    "type": "project",
+    "require": {
+        "drutiny/acquia": "3.x-dev"
+    },
+    "authors": [
+        {
+            "name": "Josh Waihi",
+            "email": "josh.waihi@acquia.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "Drutiny\\Acquia\\AMA\\": "src/",
+            "DrutinyTests\\Acquia\\AMA\\": "tests/src/"
+        }
+    }
+}
