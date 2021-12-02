@@ -1,5 +1,5 @@
 {
-    "name": "acquia/migrate-assessment",
+    "name": "acquia/ama-report-builder",
     "description": "Acquia migrate assessment report builder.",
     "type": "project",
     "require": {
