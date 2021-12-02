@@ -1,0 +1,11 @@
+parameters:
+    profile.allow_list:
+      - ama_assessment_plan
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: true
+
+    Drutiny\Acquia\AMA\Audit\:
+        resource: 'src/Audit/*'
