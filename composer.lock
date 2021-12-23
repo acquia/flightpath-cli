@@ -215,12 +215,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/drutiny/drutiny.git",
-                "reference": "57de6135411ad3c3930500468083059cff9f5e1a"
+                "reference": "54d4a23fa6dc675419e072e2e4e2531d1bb3fdd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drutiny/drutiny/zipball/57de6135411ad3c3930500468083059cff9f5e1a",
-                "reference": "57de6135411ad3c3930500468083059cff9f5e1a",
+                "url": "https://api.github.com/repos/drutiny/drutiny/zipball/54d4a23fa6dc675419e072e2e4e2531d1bb3fdd1",
+                "reference": "54d4a23fa6dc675419e072e2e4e2531d1bb3fdd1",
                 "shasum": ""
             },
             "require": {
@@ -260,6 +260,7 @@
                 "phpunit/phpunit": "*",
                 "squizlabs/php_codesniffer": "3.*"
             },
+            "default-branch": true,
             "bin": [
                 "bin/drutiny",
                 "bin/build_phar"
@@ -300,7 +301,7 @@
                 "issues": "https://github.com/drutiny/drutiny/issues",
                 "source": "https://github.com/drutiny/drutiny"
             },
-            "time": "2021-11-30T21:08:38+00:00"
+            "time": "2021-12-22T19:45:50+00:00"
         },
         {
             "name": "erusev/parsedown",

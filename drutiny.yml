@@ -1,6 +1,6 @@
 parameters:
-    profile.allow_list:
-      - ama_assessment_plan
+   profile.allow_list:
+     - ama_flight_path
 services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
