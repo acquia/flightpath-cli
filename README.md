@@ -32,5 +32,15 @@ drush site-alias
 ## Usage
 
 ```
-drutiny
-``
+./flightpath profile:run ama_flight_path @<site>.<env> --format=html
+```
+
+This will generate the flightpath report for the given site.
+
+## Multisite
+You can build reports for each site in a multisite by using the `--uri` option
+to specify the URI for each site in the Drupal instance.
+
+```
+./flightpath profile:run ama_flight_path @<site>.<env> --format=html --uri=www.siteA.com --uri=www.siteB.com --uri=....
+```
