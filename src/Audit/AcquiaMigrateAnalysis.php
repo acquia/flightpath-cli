@@ -388,7 +388,9 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
             ':db' => $databases['default']['default']['database'],
             ':heartbeat' => '__ACQUIA_MONITORING'
           ])->fetchAllKeyed();
-          return [array_combine($i, array_map(fn($m) => module_invoke($m, 'schema'), $i)), $r];
+
+          $f = function ($m) { return module_invoke($m, 'schema'); };
+          return [array_combine($i, array_map($f, $i)), $r];
         });
 
         $this->set('schema_by_module', $data[0]);
