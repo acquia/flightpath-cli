@@ -78,7 +78,7 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
     /**
      * Decorate module data with filepath metadata.
      */
-    protected function getModuleFilepathData($modules):array
+    protected function getModuleFilepathData(array $modules):array
     {
       // Get the locations of all the modules in the codebase.
       $filepaths = $this->target->getService('exec')->run('find $DRUSH_ROOT -name \*.info -type f -print -exec grep -in project {} /dev/null \;', function ($output) {
