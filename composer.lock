@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "901ac997c16d490782d92d42ac6d3781",
+    "content-hash": "502e45685b9802abe5b51e0c194ffae6",
     "packages": [
         {
             "name": "cebe/php-openapi",
@@ -215,12 +215,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/drutiny/drutiny.git",
-                "reference": "a6df709efd76f08afb6543402f85eddd0c3afe63"
+                "reference": "37c49690a38f19fd0aead4e07d9eed951ea42b74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drutiny/drutiny/zipball/a6df709efd76f08afb6543402f85eddd0c3afe63",
-                "reference": "a6df709efd76f08afb6543402f85eddd0c3afe63",
+                "url": "https://api.github.com/repos/drutiny/drutiny/zipball/37c49690a38f19fd0aead4e07d9eed951ea42b74",
+                "reference": "37c49690a38f19fd0aead4e07d9eed951ea42b74",
                 "shasum": ""
             },
             "require": {
@@ -301,7 +301,7 @@
                 "issues": "https://github.com/drutiny/drutiny/issues",
                 "source": "https://github.com/drutiny/drutiny"
             },
-            "time": "2021-12-23T19:40:20+00:00"
+            "time": "2022-01-10T09:49:41+00:00"
         },
         {
             "name": "erusev/parsedown",
