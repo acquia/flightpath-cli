@@ -1,6 +1,7 @@
 parameters:
    profile.allow_list:
      - ama_flight_path
+   progress_bar.loading_message: ✈️  Booting up navigation systems...
 services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
