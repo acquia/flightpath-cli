@@ -5,6 +5,15 @@ Drupal 7 to Drupal 9 with Acquia Migrate Accelerate.
 
 This tool is built with Drutiny.
 
+# Prerequisites
+To use this tool you'll need:
+- A unix CLI environment (OSX (Mac) or Linux)
+- [PHP 7.4](https://formulae.brew.sh/formula/php@7.4)
+- [Drush](https://docs.drush.org/en/8.x/install/) (version 8 recommended)
+
+If you're using a Mac, we recommend installing PHP with [Homebrew](https://brew.sh).
+See [installing Ubuntu on Windows 10](https://ubuntu.com/tutorials/ubuntu-on-windows).
+
 ## Installation
 This tool is a Symfony console tool that can be installed with
 composer. You'll need PHP 7.4 CLI or later and composer.
@@ -17,8 +26,10 @@ composer install
 This tool is for assessing Drupal 7 sites. There are a variety of ways to target them:
 - Using local Drush and drush aliases
 - Accessing local sites powered by [DDEV](https://ddev.readthedocs.io/en/stable/)
+- Accessing local sites powered by [Lando](https://docs.lando.dev/)
 - Accessing sites hosted on Acquia Cloud
 - Accessing sites hosted on Pantheon
+- Accessing local or remote sites with [Drush aliases](https://www.drush.org/latest/site-aliases/)
 
 Each access method uses a different **target** provider. Use the
 `target:sources` command to see which sources are available. Use
@@ -35,7 +46,8 @@ provided source.
 
 If you already use Drush, for example, to access local and remote sites
 using Drush aliases, then this tool can piggyback on that access method
-to perform its assessments.
+to perform its assessments. Note Acquia and Pantheon target sources are
+also available.
 
 ```
 # Download Drush Aliases from Acquia with Acquia CLI
@@ -74,4 +86,14 @@ to specify the URI for each site in the Drupal instance.
 
 ```
 ./flightpath profile:run ama_flight_path <target> --format=html --uri=www.siteA.com --uri=www.siteB.com --uri=....
+```
+
+## Troubleshooting
+
+### PHP Memory Exhaustion
+This could be because your PHP-CLI memory limit is set to low. You should try
+increasing it to 1024 MB. Alternately you can run PHP without a memory limit:
+
+```
+php -d memory_limit=-1 ./flightpath profile:run ama_flight_path <target> --format=html --uri=www.siteA.com
 ```
