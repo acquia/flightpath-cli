@@ -34,33 +34,23 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
           return $module['status'] != 'Not installed';
         });
 
-        $github_creds = $this->container->get('Drutiny\Plugin\GithubPlugin')->load();
-        $client = $this->container->get('http.client')->create();
-        $response = $client->request('GET', 'https://raw.githubusercontent.com/acquia/acquia-migrate-recommendations/master/recommendations.json', [
-          'headers' => [
-            'User-Agent' => 'drutiny-ama',
-            //'Accept' => 'application/vnd.github.v3+json',
-            'Accept-Encoding' => 'gzip',
-            'Authorization' => 'token ' . $github_creds['personal_access_token']
-          ]
-        ]);
-        $recommendations = json_decode($response->getBody(), true);
+        // TODO: Host recommendations remotely.
+        $recommendations = json_decode(file_get_contents(dirname(__DIR__).'/../preflight.json'), true);
 
         $vetted = $unvetted = $unknown = [];
-        foreach ($recommendations['data'] as $rule) {
-          if (!isset($rule['replaces'])) {
-            continue;
-          }
-          if (!isset($installed[$rule['replaces']['name']])) {
+        foreach ($recommendations as $project => $rule) {
+          if (!isset($modules[$project])) {
             continue;
           }
           if ($rule['vetted']) {
-            $vetted[] = $rule['replaces']['name'];
-            $modules[$rule['replaces']['name']]['strategy'] = 'ama_vetted';
+            $vetted[] = $project;
+            $modules[$project]['strategy'] = 'ama_vetted';
+            $modules[$project]['note'] = $rule['note'];
           }
           else {
-            $unvetted[] = $rule['replaces']['name'];
-            $modules[$rule['replaces']['name']]['strategy'] = 'ama_unvetted';
+            $unvetted[] = $project;
+            $modules[$project]['strategy'] = 'ama_unvetted';
+            $modules[$project]['note'] = $rule['note'];
           }
         }
         $unknown = array_diff(array_keys($installed), $vetted, $unvetted);
