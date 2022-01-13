@@ -22,6 +22,14 @@ composer. You'll need PHP 7.4 CLI or later and composer.
 composer install
 ```
 
+Note: The Acquia Cloud plugin for this tool requires an API key which without
+may block some functionality. Please ensure you've generated an [API key from
+Acquia Cloud](https://docs.acquia.com/cloud-platform/develop/api/auth/#cloud-generate-api-token). Install your API credentials into the flightpath tool using `plugin:setup`.
+
+```
+./flightpath plugin:setup acquia:cloud
+```
+
 ## Accessing your target Drupal 7 site
 This tool is for assessing Drupal 7 sites. There are a variety of ways to target them:
 - Using local Drush and drush aliases
