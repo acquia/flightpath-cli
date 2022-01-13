@@ -10,3 +10,6 @@ services:
 
     Drutiny\Acquia\AMA\Audit\:
         resource: 'src/Audit/*'
+
+    Drutiny\Acquia\AMA\EventSubscriber\Drutiny:
+        tags: [drutiny.event_subscriber]
