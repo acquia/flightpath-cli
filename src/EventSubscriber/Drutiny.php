@@ -30,6 +30,9 @@ class Drutiny implements EventSubscriberInterface {
    */
   public function enforceTelemetry(ConsoleCommandEvent $event)
   {
+     if (!file_exists(DRUTINY_LIB.'/flightpath')) {
+       return;
+     }
      if (!in_array($event->getCommand()->getName(), ['profile:run', 'policy:audit'])) {
        return;
      }
