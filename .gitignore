@@ -1,2 +1,6 @@
 vendor
 *.html
+*.gz
+*.zip
+*.phar
+.build

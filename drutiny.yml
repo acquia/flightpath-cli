@@ -1,4 +1,5 @@
 parameters:
+   name: 'Acquia Migrate: Accelerate Flight Path Report Builder'
    profile.allow_list:
      - ama_flight_path
    progress_bar.loading_message: ✈️  Booting up navigation systems...
