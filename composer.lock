@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "84a9434bb33fb5036a45f46ec02ff9fd",
+    "content-hash": "7dbdc8f915fc6991fed19be129195830",
     "packages": [
         {
             "name": "cebe/php-openapi",
@@ -215,12 +215,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/drutiny/drutiny.git",
-                "reference": "919034b5302681b8962639422266d9f7b865ca4c"
+                "reference": "25cea3f006aa88d921ea1aaa1f79536dfec7b997"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drutiny/drutiny/zipball/919034b5302681b8962639422266d9f7b865ca4c",
-                "reference": "919034b5302681b8962639422266d9f7b865ca4c",
+                "url": "https://api.github.com/repos/drutiny/drutiny/zipball/25cea3f006aa88d921ea1aaa1f79536dfec7b997",
+                "reference": "25cea3f006aa88d921ea1aaa1f79536dfec7b997",
                 "shasum": ""
             },
             "require": {
@@ -301,7 +301,7 @@
                 "issues": "https://github.com/drutiny/drutiny/issues",
                 "source": "https://github.com/drutiny/drutiny"
             },
-            "time": "2022-01-17T21:55:03+00:00"
+            "time": "2022-01-17T22:33:53+00:00"
         },
         {
             "name": "drutiny/pantheon",
