@@ -15,19 +15,41 @@ If you're using a Mac, we recommend installing PHP with [Homebrew](https://brew.
 See [installing Ubuntu on Windows 10](https://ubuntu.com/tutorials/ubuntu-on-windows).
 
 ## Installation
-This tool is a Symfony console tool that can be installed with
-composer. You'll need PHP 7.4 CLI or later and composer.
+### From Phar
+
+Download the latest Phar file from the [releases page](https://github.com/acquia/ama-report-builder/releases)
+or from the version provided to you by Acquia. We recommend you place this inside
+your CLI path.
+
+```
+mv flightpath-<version>.phar /usr/local/bin/flightpath
+```
+Once installed you should be able to access it from anywhere in your terminal:
+
+```
+flightpath --version
+```
+
+### From Source (with composer)
+If you have access to the source code, you can build from source with composers
 
 ```
 composer install
 ```
 
-Note: The Acquia Cloud plugin for this tool requires an API key which without
+Once installed, you'll run flightpath from only within the root of the project.
+
+```
+./flightpath --version
+```
+
+## Setup Acquia Cloud Plugin
+The Acquia Cloud plugin for this tool requires an API key which without
 may block some functionality. Please ensure you've generated an [API key from
 Acquia Cloud](https://docs.acquia.com/cloud-platform/develop/api/auth/#cloud-generate-api-token). Install your API credentials into the flightpath tool using `plugin:setup`.
 
 ```
-./flightpath plugin:setup acquia:cloud
+flightpath plugin:setup acquia:cloud
 ```
 
 ## Accessing your target Drupal 7 site
@@ -46,10 +68,10 @@ provided source.
 
 ```
 # List all target sources:
-./flightpath target:sources
+flightpath target:sources
 
 # Show all available drush aliases:
-./flightpath target:list drush
+flightpath target:list drush
 ```
 
 If you already use Drush, for example, to access local and remote sites
@@ -80,7 +102,7 @@ Drupal sites have their SSH configuration set inside the Drush alias.
 ## Usage
 
 ```
-./flightpath profile:run ama_flight_path <target> --format=html
+flightpath profile:run ama_flight_path <target> --format=html
 ```
 
 This will generate the flightpath report for the given site in HTML
@@ -93,7 +115,7 @@ You can build reports for each site in a multisite by using the `--uri` option
 to specify the URI for each site in the Drupal instance.
 
 ```
-./flightpath profile:run ama_flight_path <target> --format=html --uri=www.siteA.com --uri=www.siteB.com --uri=....
+flightpath profile:run ama_flight_path <target> --format=html --uri=www.siteA.com --uri=www.siteB.com --uri=....
 ```
 
 ## Troubleshooting
@@ -103,5 +125,17 @@ This could be because your PHP-CLI memory limit is set to low. You should try
 increasing it to 1024 MB. Alternately you can run PHP without a memory limit:
 
 ```
-php -d memory_limit=-1 ./flightpath profile:run ama_flight_path <target> --format=html --uri=www.siteA.com
+php -d memory_limit=-1 /path/to/flightpath profile:run ama_flight_path <target> --format=html --uri=www.siteA.com
 ```
+
+### Phar file not working
+Environments may have configrations that prohibit the use of phar files. If so,
+you might like to first [extract the phar file](https://stackoverflow.com/questions/12997385/extracting-files-from-phar-archive) and use it from source instead.
+
+Alternatively, if you're using Suhosin, you may want to ensure phars are on the allow list:
+
+```
+suhosin.executor.include.whitelist = phar
+
+```
+See https://stackoverflow.com/questions/19925526/using-cli-to-use-phar-file-not-working
