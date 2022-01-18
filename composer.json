@@ -20,5 +20,10 @@
             "Drutiny\\Acquia\\AMA\\": "src/",
             "DrutinyTests\\Acquia\\AMA\\": "tests/src/"
         }
+    },
+    "scripts": {
+      "build": [
+        "./vendor/bin/build_phar `git branch | awk '{print $2}'` --name=flightpath"
+      ]
     }
 }
