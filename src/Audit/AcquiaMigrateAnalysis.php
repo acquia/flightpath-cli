@@ -14,6 +14,8 @@ use Drutiny\Audit\Drupal\ModuleAnalysis;
 class AcquiaMigrateAnalysis extends ModuleAnalysis
 {
 
+  const PREFLIGHT_JSON = 'https://raw.githubusercontent.com/acquia/acquia-migrate-accelerate/metadata/preflight.json';
+
   /**
    * Gather migarate details.
    */
@@ -34,8 +36,10 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
           return $module['status'] != 'Not installed';
         });
 
-        // TODO: Host recommendations remotely.
-        $recommendations = json_decode(file_get_contents(dirname(__DIR__).'/../preflight.json'), true);
+        $recommendations = $this->runCacheable(self::PREFLIGHT_JSON, function ($item) {
+          $item->expiresAfter(86400);
+          return json_decode(file_get_contents(self::PREFLIGHT_JSON), true);
+        });
 
         $vetted = $unvetted = $unknown = [];
         foreach ($recommendations as $project => $rule) {
