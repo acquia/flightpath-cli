@@ -4,8 +4,8 @@
     "type": "project",
     "require": {
         "drutiny/acquia": "^3.4",
-        "drutiny/drutiny": "^3.1.7",
-        "drutiny/pantheon": "1.x-dev"
+        "drutiny/drutiny": "^3.1.8",
+        "drutiny/pantheon": "^1.0"
     },
     "authors": [
         {
