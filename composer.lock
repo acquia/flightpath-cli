@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "95e0af27712f91eece81a4eac8a21b96",
+    "content-hash": "37f329a4730a2d839d9add3395c5ac45",
     "packages": [
         {
             "name": "cebe/php-openapi",
@@ -215,12 +215,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/drutiny/drutiny.git",
-                "reference": "25cea3f006aa88d921ea1aaa1f79536dfec7b997"
+                "reference": "09a04aa284433aeff8e9844e2cc9a186dc100d65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drutiny/drutiny/zipball/25cea3f006aa88d921ea1aaa1f79536dfec7b997",
-                "reference": "25cea3f006aa88d921ea1aaa1f79536dfec7b997",
+                "url": "https://api.github.com/repos/drutiny/drutiny/zipball/09a04aa284433aeff8e9844e2cc9a186dc100d65",
+                "reference": "09a04aa284433aeff8e9844e2cc9a186dc100d65",
                 "shasum": ""
             },
             "require": {
@@ -301,7 +301,7 @@
                 "issues": "https://github.com/drutiny/drutiny/issues",
                 "source": "https://github.com/drutiny/drutiny"
             },
-            "time": "2022-01-17T22:33:53+00:00"
+            "time": "2022-01-26T11:01:32+00:00"
         },
         {
             "name": "drutiny/pantheon",
@@ -309,12 +309,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/drutiny/plugin-pantheon.git",
-                "reference": "d199f0849498b2f4eea9827bd801e25330ce4a20"
+                "reference": "885ad3d04cd69bd371d7ba65c4fd304d7aafe75c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drutiny/plugin-pantheon/zipball/d199f0849498b2f4eea9827bd801e25330ce4a20",
-                "reference": "d199f0849498b2f4eea9827bd801e25330ce4a20",
+                "url": "https://api.github.com/repos/drutiny/plugin-pantheon/zipball/885ad3d04cd69bd371d7ba65c4fd304d7aafe75c",
+                "reference": "885ad3d04cd69bd371d7ba65c4fd304d7aafe75c",
                 "shasum": ""
             },
             "require": {
@@ -350,7 +350,7 @@
                 "issues": "https://github.com/drutiny/plugin-pantheon/issues",
                 "source": "https://github.com/drutiny/plugin-pantheon"
             },
-            "time": "2022-01-11T22:18:58+00:00"
+            "time": "2022-01-26T11:03:30+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -4333,9 +4333,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "drutiny/pantheon": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
