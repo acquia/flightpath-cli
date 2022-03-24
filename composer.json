@@ -3,9 +3,9 @@
     "description": "Acquia migrate assessment report builder.",
     "type": "project",
     "require": {
-        "drutiny/acquia": "^3.4",
-        "drutiny/drutiny": "^3.1.10",
-        "drutiny/pantheon": "^1.0"
+        "drutiny/acquia": "^4.0",
+        "drutiny/drutiny": "3.3.0",
+        "drutiny/pantheon": "^1.1"
     },
     "authors": [
         {
@@ -21,6 +21,12 @@
             "DrutinyTests\\Acquia\\AMA\\": "tests/src/"
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/drutiny/plugin-acquia.git"
+        }
+    ],
     "scripts": {
       "build": [
         "./vendor/bin/build_phar `git branch | awk '{print $2}'` --name=flightpath"
