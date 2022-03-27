@@ -1,0 +1,4 @@
+name: Flightpath Report Builder
+package: flightpath
+version: 1.x
+vcs: git@github.com:acquia/ama-report-builder.git
