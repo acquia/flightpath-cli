@@ -3,9 +3,9 @@
     "description": "Acquia migrate assessment report builder.",
     "type": "project",
     "require": {
-        "drutiny/acquia": "^4.0",
-        "drutiny/drutiny": "^3.3.1",
-        "drutiny/pantheon": "^1.1"
+        "drutiny/acquia": "^4.1",
+        "drutiny/drutiny": "^3.4.1",
+        "drutiny/pantheon": "^1.2"
     },
     "authors": [
         {
@@ -29,7 +29,17 @@
     ],
     "scripts": {
       "build": [
-        "./vendor/bin/build_phar `git branch | awk '{print $2}'` --name=flightpath"
+        "./vendor/bin/drutiny-packager `git log -1 --format=%h | cat`"
+      ],
+      "docker.build.image": [
+        "docker build -f vendor/drutiny/drutiny/Dockerfile --build-arg PHP_VERSION=7.4 -t flightpath:7.4 .",
+        "docker build -f vendor/drutiny/drutiny/Dockerfile --build-arg PHP_VERSION=8.0 -t flightpath:8.0 .",
+        "docker build -f vendor/drutiny/drutiny/Dockerfile --build-arg PHP_VERSION=8.1 -t flightpath:8.1 ."
+      ],
+      "docker.build.release": [
+        "docker run -it --rm -v \"$PWD\":/usr/src/myapp flightpath:7.4 ./vendor/bin/drutiny-packager",
+        "docker run -it --rm -v \"$PWD\":/usr/src/myapp flightpath:8.0 ./vendor/bin/drutiny-packager",
+        "docker run -it --rm -v \"$PWD\":/usr/src/myapp flightpath:8.1 ./vendor/bin/drutiny-packager"
       ]
     }
 }
