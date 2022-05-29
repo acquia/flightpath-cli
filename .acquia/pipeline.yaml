@@ -1,0 +1,44 @@
+type: default
+team: devx
+# group: drupal-cloud
+service: flightpath
+validate_config: true
+
+# The environment container image is used to prepare code versions
+# and tooling for tests during pre, post and build stages.
+environment_image:
+  file: ".acquia/Dockerfile.ci"
+  context: "."
+  build_args:
+    - secrets:
+      - type: vault
+        key: SSH_KEY
+        value: GIT_SSH_KEY
+        path: secret/pipeline-default/GIT_SSH_KEY
+  build_matrix:
+    base_images:
+      - php:7.4-cli
+      - php:8.0-cli
+      - php:8.1-cli
+
+# Pre-build runs after building the environment image, and relies on it to
+# run its sub-stages' steps inside of the environment container.
+pre_build:
+  build_package:
+    - steps:
+      - |
+        cd /flightpath
+        ./vendor/bin/drutiny-packager $TAG_NAME
+
+post_build:
+  github_release:
+    secrets:
+       type: vault
+       value: GITHUB_ACCESS_TOKEN
+       path: secret/pipeline-default/GITHUB_ACCESS_TOKEN
+    release_name: '$TAG_NAME'
+    files:
+      - '*.phar'
+
+notify:
+  channel: drutiny

@@ -1,0 +1,16 @@
+ARG BASE_IMAGE=php:7.4-cli
+ARG REPO_LOCATION
+
+FROM ${REPO_LOCATION}composer:latest as composer
+FROM ${REPO_LOCATION}${BASE_IMAGE}
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY . /flightpath
+
+WORKDIR /flightpath
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install unzip tar git -y
+RUN echo "phar.readonly=0" > /usr/local/etc/php/conf.d/phar.ini
+RUN composer install
