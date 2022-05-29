@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b45dab900412b09a3c5bb0a038de2272",
+    "content-hash": "ad70e42ac1c4ebbf123cb1ea701be6b0",
     "packages": [
         {
             "name": "cebe/php-openapi",
@@ -209,22 +209,22 @@
         },
         {
             "name": "drutiny/drutiny",
-            "version": "3.4.3",
+            "version": "3.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drutiny/drutiny.git",
-                "reference": "8d363adb82bcc227038412e71b2d404e430cad5b"
+                "reference": "985915d5a28a5e3aea2f66f3d4ba065349dcb07e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drutiny/drutiny/zipball/8d363adb82bcc227038412e71b2d404e430cad5b",
-                "reference": "8d363adb82bcc227038412e71b2d404e430cad5b",
+                "url": "https://api.github.com/repos/drutiny/drutiny/zipball/985915d5a28a5e3aea2f66f3d4ba065349dcb07e",
+                "reference": "985915d5a28a5e3aea2f66f3d4ba065349dcb07e",
                 "shasum": ""
             },
             "require": {
                 "composer/semver": "^1.4.2",
                 "erusev/parsedown": "^1.6.3",
-                "fiasco/async": "^3.0",
+                "fiasco/async": "^3.1",
                 "fiasco/symfony-console-style-markdown": "^1.2",
                 "guzzlehttp/guzzle": "~6.0",
                 "kevinrob/guzzle-cache-middleware": "^3.2.1",
@@ -260,6 +260,7 @@
             "suggest": {
                 "ext-pcntl": "*"
             },
+            "default-branch": true,
             "bin": [
                 "bin/drutiny",
                 "bin/build_phar",
@@ -301,7 +302,7 @@
                 "issues": "https://github.com/drutiny/drutiny/issues",
                 "source": "https://github.com/drutiny/drutiny"
             },
-            "time": "2022-05-23T21:11:12+00:00"
+            "time": "2022-05-29T22:45:24+00:00"
         },
         {
             "name": "drutiny/pantheon",
@@ -4949,7 +4950,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": [],
-    "prefer-stable": true,
+    "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
