@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad70e42ac1c4ebbf123cb1ea701be6b0",
+    "content-hash": "ee18ae79940507a8ef2c7e96e331f0aa",
     "packages": [
         {
             "name": "cebe/php-openapi",
@@ -209,16 +209,16 @@
         },
         {
             "name": "drutiny/drutiny",
-            "version": "3.4.6",
+            "version": "3.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drutiny/drutiny.git",
-                "reference": "a2aae7ae7e392749d914136d333fc9a61eefd754"
+                "reference": "347f5b6f2f0d396f4e8e9920c279f9f850fb652e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drutiny/drutiny/zipball/a2aae7ae7e392749d914136d333fc9a61eefd754",
-                "reference": "a2aae7ae7e392749d914136d333fc9a61eefd754",
+                "url": "https://api.github.com/repos/drutiny/drutiny/zipball/347f5b6f2f0d396f4e8e9920c279f9f850fb652e",
+                "reference": "347f5b6f2f0d396f4e8e9920c279f9f850fb652e",
                 "shasum": ""
             },
             "require": {
@@ -260,6 +260,7 @@
             "suggest": {
                 "ext-pcntl": "*"
             },
+            "default-branch": true,
             "bin": [
                 "bin/drutiny",
                 "bin/build_phar",
@@ -301,7 +302,7 @@
                 "issues": "https://github.com/drutiny/drutiny/issues",
                 "source": "https://github.com/drutiny/drutiny"
             },
-            "time": "2022-06-12T19:54:08+00:00"
+            "time": "2022-06-14T18:27:32+00:00"
         },
         {
             "name": "drutiny/pantheon",
@@ -4949,8 +4950,10 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
-    "prefer-stable": true,
+    "stability-flags": {
+        "drutiny/drutiny": 20
+    },
+    "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
