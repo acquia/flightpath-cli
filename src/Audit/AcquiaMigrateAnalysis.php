@@ -6,6 +6,7 @@ use Drutiny\Sandbox\Sandbox;
 use Composer\Semver\Comparator;
 use Composer\Semver\Semver;
 use Drutiny\Audit\Drupal\ModuleAnalysis;
+use Drutiny\Audit\AuditValidationException;
 
 /**
  * Generic module is enabled check.
@@ -13,12 +14,11 @@ use Drutiny\Audit\Drupal\ModuleAnalysis;
  */
 class AcquiaMigrateAnalysis extends ModuleAnalysis
 {
+    public const PREFLIGHT_JSON = 'https://raw.githubusercontent.com/acquia/acquia-migrate-accelerate/metadata/preflight.json';
 
-  const PREFLIGHT_JSON = 'https://raw.githubusercontent.com/acquia/acquia-migrate-accelerate/metadata/preflight.json';
-
-  /**
-   * Gather migarate details.
-   */
+    /**
+     * Gather migarate details.
+     */
     public function gather(Sandbox $sandbox)
     {
         // Gather module data from drush pm-list.
@@ -29,33 +29,32 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
         $modules = $this->getDecoratedModuleData($modules);
 
         foreach ($modules as &$module) {
-          $module['strategy'] = 'unknown';
+            $module['strategy'] = 'unknown';
         }
 
         $installed = array_filter($modules, function ($module) {
-          return $module['status'] != 'Not installed';
+            return $module['status'] != 'Not installed';
         });
 
         $recommendations = $this->runCacheable(self::PREFLIGHT_JSON, function ($item) {
-          $item->expiresAfter(86400);
-          return json_decode(file_get_contents(self::PREFLIGHT_JSON), true);
+            $item->expiresAfter(86400);
+            return json_decode(file_get_contents(self::PREFLIGHT_JSON), true);
         });
 
         $vetted = $unvetted = $unknown = [];
         foreach ($recommendations as $project => $rule) {
-          if (!isset($modules[$project])) {
-            continue;
-          }
-          if ($rule['vetted']) {
-            $vetted[] = $project;
-            $modules[$project]['strategy'] = 'ama_vetted';
-            $modules[$project]['note'] = $rule['note'];
-          }
-          else {
-            $unvetted[] = $project;
-            $modules[$project]['strategy'] = 'ama_unvetted';
-            $modules[$project]['note'] = $rule['note'];
-          }
+            if (!isset($modules[$project])) {
+                continue;
+            }
+            if ($rule['vetted']) {
+                $vetted[] = $project;
+                $modules[$project]['strategy'] = 'ama_vetted';
+                $modules[$project]['note'] = $rule['note'];
+            } else {
+                $unvetted[] = $project;
+                $modules[$project]['strategy'] = 'ama_unvetted';
+                $modules[$project]['note'] = $rule['note'];
+            }
         }
         $unknown = array_diff(array_keys($installed), $vetted, $unvetted);
         $this->set('vetted', $vetted);
@@ -72,46 +71,46 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
     /**
      * Decorate module data with filepath metadata.
      */
-    protected function getModuleFilepathData(array $modules):array
+    protected function getModuleFilepathData(array $modules): array
     {
-      // Get the locations of all the modules in the codebase.
-      $filepaths = $this->target->getService('exec')->run('find $DRUSH_ROOT -name \*.info -type f -print -exec grep -in project {} /dev/null \;', function ($output) {
-        return array_map(function ($line) {
-          return trim($line);
-        }, explode(PHP_EOL, $output));
-      });
+        // Get the locations of all the modules in the codebase.
+        $filepaths = $this->target->getService('exec')->run('find $DRUSH_ROOT -name \*.info -type f -print -exec grep -in project {} /dev/null \;', function ($output) {
+            return array_map(function ($line) {
+                return trim($line);
+            }, explode(PHP_EOL, $output));
+        });
 
-      $module_filepaths = [];
-      $project_map = [];
+        $module_filepaths = [];
+        $project_map = [];
 
-      foreach ($filepaths as $filepath) {
-        $project_data = NULL;
-        // Parse for project data.
-        $parsed = explode(':', $filepath);
-        if (count($parsed) == 3) {
-          list($filepath, $line, $project_data) = $parsed;
-        }
-        list($module_name, , ) = explode('.', basename($filepath));
-        $module_filepaths[$module_name] = $filepath;
+        foreach ($filepaths as $filepath) {
+            $project_data = null;
+            // Parse for project data.
+            $parsed = explode(':', $filepath);
+            if (count($parsed) == 3) {
+                list($filepath, $line, $project_data) = $parsed;
+            }
+            list($module_name, , ) = explode('.', basename($filepath));
+            $module_filepaths[$module_name] = $filepath;
 
-        if (isset($project_data)) {
-          preg_match('/project ?= ?"?([^"]+)"?/', $project_data, $matches);
-          if (!empty($matches)) {
-            $project_map[$module_name] = $matches[1];
-          }
-        }
-      }
-
-      foreach($modules as $module => &$info) {
-        $info['filepath'] = $module_filepaths[$module];
-        $info['dirname'] = str_replace($this->target['drush.root'] . '/', '', dirname($info['filepath']));
-        $info['name'] = $module;
-
-        if (isset($project_map[$module])) {
-          $info['project'] = $project_map[$module];
+            if (isset($project_data)) {
+                preg_match('/project ?= ?"?([^"]+)"?/', $project_data, $matches);
+                if (!empty($matches)) {
+                    $project_map[$module_name] = $matches[1];
+                }
+            }
         }
 
-        switch (true) {
+        foreach ($modules as $module => &$info) {
+            $info['filepath'] = $module_filepaths[$module];
+            $info['dirname'] = str_replace($this->target['drush.root'] . '/', '', dirname($info['filepath']));
+            $info['name'] = $module;
+
+            if (isset($project_map[$module])) {
+                $info['project'] = $project_map[$module];
+            }
+
+            switch (true) {
           case strpos($info['filepath'], $this->target['drush.root'] . '/modules')  !== false:
             $info['type'] = 'core';
             break;
@@ -130,105 +129,104 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
             $info['type'] = 'contrib';
             break;
         }
-      }
-      return $modules;
+        }
+        return $modules;
     }
 
     /**
      * Get decorated module data.
      */
-    protected function getDecoratedModuleData($modules):array
+    protected function getDecoratedModuleData($modules): array
     {
-      foreach ($modules as $module => $info) {
+        foreach ($modules as $module => $info) {
 
         // If the module is embedded inside another project then its a sub-module.
-        $parent_modules = array_filter($modules, function ($mod) use ($info) {
-          if ($info['name'] == $mod['name']) {
-            return false;
-          }
-          return strpos($info['filepath'], $mod['dirname'] . '/') !== false;
-        });
+            $parent_modules = array_filter($modules, function ($mod) use ($info) {
+                if ($info['name'] == $mod['name']) {
+                    return false;
+                }
+                return strpos($info['filepath'], $mod['dirname'] . '/') !== false;
+            });
 
-        if (count($parent_modules)) {
-          $modules[$module]['type'] = 'sub-module';
-          $modules[$module]['parent'] = reset($parent_modules)['name'];
-          $modules[$modules[$module]['parent']]['sub-modules'][] = $modules[$module]['name'];
+            if (count($parent_modules)) {
+                $modules[$module]['type'] = 'sub-module';
+                $modules[$module]['parent'] = reset($parent_modules)['name'];
+                $modules[$modules[$module]['parent']]['sub-modules'][] = $modules[$module]['name'];
+            }
+
+            $modules[$module]['upgrade_path'] = false;
+
+            if ($modules[$module]['type'] == 'contrib') {
+                $project = $info['project'] ?? $module;
+                $has_d7_versions = $this->getVersions($project, '7.x');
+                $has_current_versions = $this->getVersions($project, 'current');
+
+                if (!$has_d7_versions && !$has_current_versions) {
+                    $modules[$module]['type'] = 'custom';
+                }
+
+                if ($has_current_versions) {
+                    $modules[$module]['upgrade_path'] = true;
+                }
+            }
         }
-
-        $modules[$module]['upgrade_path'] = false;
-
-        if ($modules[$module]['type'] == 'contrib') {
-
-          $project = $info['project'] ?? $module;
-          $has_d7_versions = $this->getVersions($project, '7.x');
-          $has_current_versions = $this->getVersions($project, 'current');
-
-          if (!$has_d7_versions && !$has_current_versions) {
-            $modules[$module]['type'] = 'custom';
-          }
-
-          if ($has_current_versions) {
-            $modules[$module]['upgrade_path'] = true;
-          }
-        }
-      }
-      return $modules;
+        return $modules;
     }
 
     protected function getVersions($project, $version = 'current')
     {
-      $url = strtr('https://updates.drupal.org/release-history/%module%/%version%', [
+        $url = strtr('https://updates.drupal.org/release-history/%module%/%version%', [
         '%module%' => $project,
         '%version%' => $version
       ]);
-      $history = $this->getUpdates($url);
+        $history = $this->getUpdates($url);
 
-      // No release history was found.
-      if (!is_array($history)) {
-        return false;
-      }
-
-      return $history;
-    }
-
-    protected function getUpdates($url) {
-      return $this->runCacheable($url, function () use ($url) {
-        $client = $this->container->get('http.client')->create();
-        $response = $client->request('GET', $url);
-
-        if ($response->getStatusCode() != 200) {
-          return false;
+        // No release history was found.
+        if (!is_array($history)) {
+            return false;
         }
 
-        return $this->toArray(simplexml_load_string($response->getBody()));
-      });
+        return $history;
+    }
+
+    protected function getUpdates($url)
+    {
+        return $this->runCacheable($url, function () use ($url) {
+            $client = $this->container->get('http.client')->create();
+            $response = $client->request('GET', $url);
+
+            if ($response->getStatusCode() != 200) {
+                return false;
+            }
+
+            return $this->toArray(simplexml_load_string($response->getBody()));
+        });
     }
 
     protected function toArray(\SimpleXMLElement $el)
     {
-      $array = [];
+        $array = [];
 
-      if (!$el->count()) {
-        return (string) $el;
-      }
-
-      $keys = [];
-      foreach ($el->children() as $c) {
-        $keys[] = $c->getName();
-      }
-
-      $is_assoc = count($keys) == count(array_unique($keys));
-
-      foreach ($el->children() as $c) {
-        if ($is_assoc) {
-          $array[$c->getName()] = $this->toArray($c);
+        if (!$el->count()) {
+            return (string) $el;
         }
-        else {
-          $array[] = $this->toArray($c);
-        }
-      }
 
-      return $array;
+        $keys = [];
+        foreach ($el->children() as $c) {
+            $keys[] = $c->getName();
+        }
+
+        $is_assoc = count($keys) == count(array_unique($keys));
+
+        foreach ($el->children() as $c) {
+            if ($is_assoc) {
+                $array[$c->getName()] = $this->toArray($c);
+            } else {
+                $array[] = $this->toArray($c);
+            }
+        }
+
+        return $array;
     }
 
     protected function getCustomModuleAnalysis()
@@ -237,9 +235,9 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
         $modules = $this->get('modules');
 
         $output = $this->target->getService('exec')->run('find $DRUSH_ROOT/*/*/modules -type f -exec wc -c -l {} \;', function ($output) {
-          return array_map(function ($line) {
-            return trim($line);
-          }, explode(PHP_EOL, $output));
+            return array_map(function ($line) {
+                return trim($line);
+            }, explode(PHP_EOL, $output));
         });
 
         $basestat = [
@@ -255,49 +253,48 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
         ];
 
         foreach ($output as $line) {
-          $parsed = explode(' ', $line, 3);
-          if (count($parsed) != 3) {
-            continue;
-          }
-          list($lines, $bytes, $filepath) = $parsed;
-          $ext = pathinfo($filepath, PATHINFO_EXTENSION);
-
-          // Maybe multiple matches if file belongs to a sub-module.
-          $candidates = array_filter($modules, function ($m) use ($filepath) {
-            return strpos($filepath, $m['dirname']) !== false;
-          });
-
-          // Cannot associate file with module so exclude.
-          if (empty($candidates)) {
-            continue;
-          }
-
-          // Use candidate with longest dirname (highest specificity).
-          uasort($candidates, function ($a, $b) {
-            if (strlen($a['dirname']) == strlen($b['dirname'])) {
-              return 0;
+            $parsed = explode(' ', $line, 3);
+            if (count($parsed) != 3) {
+                continue;
             }
-            return strlen($a['dirname']) > strlen($b['dirname']) ? -1 : 1;
-          });
+            list($lines, $bytes, $filepath) = $parsed;
+            $ext = pathinfo($filepath, PATHINFO_EXTENSION);
 
-          $module = key($candidates);
+            // Maybe multiple matches if file belongs to a sub-module.
+            $candidates = array_filter($modules, function ($m) use ($filepath) {
+                return strpos($filepath, $m['dirname']) !== false;
+            });
 
-          if (!isset($modules[$module]['stat'])) {
-            $modules[$module]['stat'] = $basestat;
-          }
+            // Cannot associate file with module so exclude.
+            if (empty($candidates)) {
+                continue;
+            }
 
-          $modules[$module]['stat']['files']++;
+            // Use candidate with longest dirname (highest specificity).
+            uasort($candidates, function ($a, $b) {
+                if (strlen($a['dirname']) == strlen($b['dirname'])) {
+                    return 0;
+                }
+                return strlen($a['dirname']) > strlen($b['dirname']) ? -1 : 1;
+            });
 
-          switch (strtolower($ext)) {
+            $module = key($candidates);
+
+            if (!isset($modules[$module]['stat'])) {
+                $modules[$module]['stat'] = $basestat;
+            }
+
+            $modules[$module]['stat']['files']++;
+
+            switch (strtolower($ext)) {
             case 'php':
             case 'inc':
             case 'install':
             case 'module':
-              if (strpos($filepath, 'tpl.php') === FALSE) {
-                $modules[$module]['stat']['php']++;
-              }
-              else {
-                $modules[$module]['stat']['tpl']++;
+              if (strpos($filepath, 'tpl.php') === false) {
+                  $modules[$module]['stat']['php']++;
+              } else {
+                  $modules[$module]['stat']['tpl']++;
               }
               $modules[$module]['stat']['size'] += $bytes;
               break;
@@ -348,7 +345,7 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
     protected function getEntityInfo()
     {
         $data = $this->target->getService('drush')->runtime(function () {
-          return [entity_get_info()];
+            return [entity_get_info()];
         });
 
         $this->set('entity_info', $data[0]);
@@ -360,7 +357,7 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
     protected function getFieldTypeInformation()
     {
         $data = $this->target->getService('drush')->runtime(function () {
-          return [field_info_field_types(), field_info_fields()];
+            return [field_info_field_types(), field_info_fields()];
         });
 
         $this->set('field_types', $data[0]);
@@ -373,29 +370,60 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
     protected function getSchemaAnalysis()
     {
         $data = $this->target->getService('drush')->runtime(function () {
-          require_once 'includes/install.inc';
-          drupal_load_updates();
-          $i = module_implements('schema');
-          global $databases;
+            require_once 'includes/install.inc';
+            drupal_load_updates();
+            $i = module_implements('schema');
+            global $databases;
 
-          $r = db_query('SELECT table_name, table_rows FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = :db AND table_name != :heartbeat', [
-            ':db' => $databases['default']['default']['database'],
-            ':heartbeat' => '__ACQUIA_MONITORING'
-          ])->fetchAllKeyed();
+            $db = $databases['default']['default'];
+            $r = [];
 
-          $f = function ($m) { return module_invoke($m, 'schema'); };
-          return [array_combine($i, array_map($f, $i)), $r];
+            switch ($db['driver']) {
+              case 'mysql':
+              case 'sqlite':
+                $r = db_query('SELECT table_name, table_rows FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = :db AND table_name != :heartbeat', [
+                  ':db' => $db['database'],
+                  ':heartbeat' => '__ACQUIA_MONITORING'
+                ])->fetchAllKeyed();
+                break;
+
+              case 'pgsql':
+              $schema = 'public';
+              if (!empty($db['prefix']) && (strpos($db['prefix'], '.') !== false)) {
+                  $schema = array_shift(explode('.', $db['prefix']));
+              }
+              $r = db_query("WITH tbl AS
+                 (SELECT TABLE_NAME
+                     FROM information_schema.tables
+                     WHERE TABLE_NAME not like 'pg_%'
+                       AND table_schema in (:schema))
+                  SELECT
+                         TABLE_NAME AS table_name,
+                         (xpath('/row/c/text()', query_to_xml(format('select count(*) as c
+                  from %I.%I', table_schema, TABLE_NAME), FALSE, TRUE, '')))[1]::text::int
+                  AS table_rows
+                  FROM tbl
+                  ORDER BY TABLE_NAME ASC", [
+                ':schema' => $schema
+              ])->fetchAllKeyed();
+              break;
+            }
+
+            $f = function ($m) {
+                return module_invoke($m, 'schema');
+            };
+            return [array_combine($i, array_map($f, $i)), $r];
         });
 
         $this->set('schema_by_module', $data[0]);
         $schema = [];
         foreach ($data[0] as $module => $tables) {
-          if (empty($tables)) {
-            continue;
-          }
-          foreach ($tables as $table => $info) {
-            $schema[$table] = $module;
-          }
+            if (empty($tables)) {
+                continue;
+            }
+            foreach ($tables as $table => $info) {
+                $schema[$table] = $module;
+            }
         }
         $this->set('table_module_map', $schema);
         $this->set('table_row_stats', $data[1]);
