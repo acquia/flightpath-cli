@@ -392,18 +392,7 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
               if (!empty($db['prefix']) && (strpos($db['prefix'], '.') !== false)) {
                   $schema = array_shift(explode('.', $db['prefix']));
               }
-              $r = db_query("WITH tbl AS
-                 (SELECT TABLE_NAME
-                     FROM information_schema.tables
-                     WHERE TABLE_NAME not like 'pg_%'
-                       AND table_schema in (:schema))
-                  SELECT
-                         TABLE_NAME AS table_name,
-                         (xpath('/row/c/text()', query_to_xml(format('select count(*) as c
-                  from %I.%I', table_schema, TABLE_NAME), FALSE, TRUE, '')))[1]::text::int
-                  AS table_rows
-                  FROM tbl
-                  ORDER BY TABLE_NAME ASC", [
+              $r = db_query("WITH tbl AS (SELECT TABLE_NAME FROM information_schema.tables WHERE TABLE_NAME not like 'pg_%' AND table_schema in (:schema)) SELECT TABLE_NAME AS table_name, (xpath('/row/c/text()', query_to_xml(format('select count(*) as c from %I.%I', table_schema, TABLE_NAME), FALSE, TRUE, '')))[1]::text::int AS table_rows FROM tbl ORDER BY TABLE_NAME ASC", [
                 ':schema' => $schema
               ])->fetchAllKeyed();
               break;
