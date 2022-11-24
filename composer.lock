@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1777209cdb8d2d4777ca81365bf85eb",
+    "content-hash": "c68e266da9205e03482c3d030d84ccfa",
     "packages": [
         {
             "name": "cebe/php-openapi",
@@ -154,16 +154,16 @@
         },
         {
             "name": "drutiny/acquia",
-            "version": "4.5",
+            "version": "4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drutiny/plugin-acquia.git",
-                "reference": "689d01a488a553013867cb60a2b223153f7fec6a"
+                "reference": "7e19163bda4c466820ea0cb9aa7a367644196a6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drutiny/plugin-acquia/zipball/689d01a488a553013867cb60a2b223153f7fec6a",
-                "reference": "689d01a488a553013867cb60a2b223153f7fec6a",
+                "url": "https://api.github.com/repos/drutiny/plugin-acquia/zipball/7e19163bda4c466820ea0cb9aa7a367644196a6e",
+                "reference": "7e19163bda4c466820ea0cb9aa7a367644196a6e",
                 "shasum": ""
             },
             "require": {
@@ -205,7 +205,7 @@
                 "issues": "https://github.com/drutiny/drutiny-acquia/issues",
                 "source": "https://github.com/drutiny/drutiny-acquia"
             },
-            "time": "2022-11-15T00:46:53+00:00"
+            "time": "2022-11-24T23:34:41+00:00"
         },
         {
             "name": "drutiny/drutiny",
