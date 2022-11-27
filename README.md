@@ -1,4 +1,4 @@
-# Drupal 9 Flight Path
+# Drupal 9 Flight Path (Beta)
 
 This tool builds a Flight Path analysis report for migrating from
 Drupal 7 to Drupal 9 and shows how Acquia Migrate Accelerate could help.
