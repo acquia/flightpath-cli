@@ -3,8 +3,8 @@
     "description": "Acquia migrate assessment report builder.",
     "type": "project",
     "require": {
-        "drutiny/acquia": "^4.7",
-        "drutiny/drutiny": "^3.4.8",
+        "drutiny/acquia": "^4.7|5.x-dev",
+        "drutiny/drutiny": "^3.4.8|^3.5",
         "drutiny/pantheon": "^1.2"
     },
     "authors": [
