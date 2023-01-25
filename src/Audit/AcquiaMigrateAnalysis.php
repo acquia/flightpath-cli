@@ -102,6 +102,13 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
         }
 
         foreach ($modules as $module => &$info) {
+            if (!isset($module_filepaths[$module])) {
+                $this->logger->warning("Cannot find filepath for module: $module. Symlinks are not followed.", [
+                    'module' => $module,
+                    'info' => $info,
+                ]);
+                $module_filepaths[$module] = 'unknown/modules/custom';
+            }
             $info['filepath'] = $module_filepaths[$module];
             $info['dirname'] = str_replace($this->target['drush.root'] . '/', '', dirname($info['filepath']));
             $info['name'] = $module;
@@ -111,24 +118,24 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
             }
 
             switch (true) {
-          case strpos($info['filepath'], $this->target['drush.root'] . '/modules')  !== false:
-            $info['type'] = 'core';
-            break;
+                case strpos($info['filepath'], $this->target['drush.root'] . '/modules')  !== false:
+                    $info['type'] = 'core';
+                    break;
 
-          case strpos($info['filepath'], 'modules/contrib')  !== false:
-            $info['type'] = 'contrib';
-            break;
+                case strpos($info['filepath'], 'modules/contrib')  !== false:
+                    $info['type'] = 'contrib';
+                    break;
 
-          case strpos($info['filepath'], 'modules/custom')  !== false:
-            $info['type'] = 'custom';
-            break;
+                case strpos($info['filepath'], 'modules/custom')  !== false:
+                    $info['type'] = 'custom';
+                    break;
 
-          // Defaulting to contrib will check for existance of the module
-          // as the default behaviour.
-          default:
-            $info['type'] = 'contrib';
-            break;
-        }
+                // Defaulting to contrib will check for existance of the module
+                // as the default behaviour.
+                default:
+                    $info['type'] = 'contrib';
+                    break;
+            }
         }
         return $modules;
     }
@@ -140,7 +147,7 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
     {
         foreach ($modules as $module => $info) {
 
-        // If the module is embedded inside another project then its a sub-module.
+            // If the module is embedded inside another project then its a sub-module.
             $parent_modules = array_filter($modules, function ($mod) use ($info) {
                 if ($info['name'] == $mod['name']) {
                     return false;
