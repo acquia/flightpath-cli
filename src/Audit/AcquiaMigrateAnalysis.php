@@ -74,7 +74,7 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
     protected function getModuleFilepathData(array $modules): array
     {
         // Get the locations of all the modules in the codebase.
-        $filepaths = $this->target->getService('exec')->run('find $DRUSH_ROOT -name \*.info -type f -print -exec grep -in project {} /dev/null \;', function ($output) {
+        $filepaths = $this->target->run('find $DRUSH_ROOT -name \*.info -type f -print -exec grep -in project {} /dev/null \;', function ($output) {
             return array_map(function ($line) {
                 return trim($line);
             }, explode(PHP_EOL, $output));
@@ -241,7 +241,7 @@ class AcquiaMigrateAnalysis extends ModuleAnalysis
         $unknown = $this->get('unknown');
         $modules = $this->get('modules');
 
-        $output = $this->target->getService('exec')->run('find $DRUSH_ROOT/*/*/modules -type f -exec wc -c -l {} \;', function ($output) {
+        $output = $this->target->run('find $DRUSH_ROOT/*/*/modules -type f -exec wc -c -l {} \;', function ($output) {
             return array_map(function ($line) {
                 return trim($line);
             }, explode(PHP_EOL, $output));

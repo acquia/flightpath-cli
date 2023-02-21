@@ -11,8 +11,5 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         public: true
 
-    Drutiny\Acquia\AMA\Audit\:
-        resource: 'src/Audit/*'
-
     Drutiny\Acquia\AMA\EventSubscriber\Drutiny:
         tags: [drutiny.event_subscriber]
